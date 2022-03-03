@@ -70,7 +70,7 @@ Dataflow diagram:
 
 ![](readme_image/dataflow.png)
 
-##2. Deployment and Run
+## 2. Deployment and Run
 *I prepared 2 ways to run this application:*
 * *Java 8 native*
 * *Docker*
@@ -98,6 +98,7 @@ After done to build image, please run this command:
 ```shell
 docker run -dp 8080:8080 tcbhw-app:latest
 ```
+If you try to use Docker, please ensure just restart container instead of create new one for testing, because if you create new container, old data will be lost.
 
 After one of both step, you will receive SpringBoot logs as below:
 ```text
@@ -121,7 +122,7 @@ After one of both step, you will receive SpringBoot logs as below:
 2022-03-03 11:29:41.993  INFO 1 --- [           main] c.hanhtd26.tcbhwapi.TcbhwApiApplication  : Started TcbhwApiApplication in 1.329 seconds (JVM running for 1.533)
 ```
 
-##3. Testing
+## 3. Testing
 
 After RESTApi server started, there are 2 ways to test API, which are:
 * **Tools as Postman, curl**
