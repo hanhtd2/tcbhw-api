@@ -17,7 +17,15 @@ public class PushEntity implements Serializable {
 
     @NotNull(message = "poolValues is mandatory")
     @JsonProperty("poolValues")
-    private Double[] poolValues;
+    private Long[] poolValues;
+
+    public PushEntity() {
+    }
+
+    public PushEntity(Long poolId, Long[] poolValues) {
+        this.poolId = poolId;
+        this.poolValues = poolValues;
+    }
 
     public long getPoolId() {
         return poolId;
@@ -27,11 +35,11 @@ public class PushEntity implements Serializable {
         this.poolId = poolId;
     }
 
-    public Double[] getPoolValues() {
+    public Long[] getPoolValues() {
         return poolValues;
     }
 
-    public void setPoolValues(Double[] poolValues) {
+    public void setPoolValues(Long[] poolValues) {
         this.poolValues = poolValues;
     }
 }

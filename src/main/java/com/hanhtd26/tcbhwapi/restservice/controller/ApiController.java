@@ -4,6 +4,7 @@ import com.hanhtd26.tcbhwapi.constant.CommonConstants;
 import com.hanhtd26.tcbhwapi.restservice.entity.PushEntity;
 import com.hanhtd26.tcbhwapi.restservice.entity.QueryEntity;
 import com.hanhtd26.tcbhwapi.restservice.entity.QueryReturnEntity;
+import com.hanhtd26.tcbhwapi.restservice.entity.SavingPushEntity;
 import com.hanhtd26.tcbhwapi.restservice.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,23 @@ public class ApiController {
         QueryReturnEntity queryReturnEntity = apiService.query(queryEntity);
         if (null != queryReturnEntity) {
             return new ResponseEntity<>(queryReturnEntity, HttpStatus.OK);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    Collections.singletonMap(CommonConstants.STATUS, "poolId is not existed!")
+            );
+        }
+    }
+
+    /**
+     * This method receives poolId and return info with sorted pool element.
+     * @param poolId
+     * @return
+     */
+    @RequestMapping(value = "/check", method = RequestMethod.GET)
+    public ResponseEntity<Object> checkPool(@RequestParam long poolId) {
+        SavingPushEntity savingPushEntity = apiService.check(poolId);
+        if (null != savingPushEntity) {
+            return new ResponseEntity<>(savingPushEntity, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(
                     Collections.singletonMap(CommonConstants.STATUS, "poolId is not existed!")

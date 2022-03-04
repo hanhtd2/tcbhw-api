@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -52,16 +53,13 @@ public class ApiService {
             SavingPushEntity savingPushEntity = new SavingPushEntity();
             savingPushEntity.setPoolId(pushEntity.getPoolId());
             savingPushEntity.setPoolValues(pushEntity.getPoolValues());
-            savingPushEntity.setTotals(sumAllElement(pushEntity.getPoolValues()));
             map.put(savingPushEntity.getPoolId(), savingPushEntity);
             return CommonConstants.INSERTED;
         } else {
-            Double[] newPools = ArrayUtils.addAll(existedEntity.getPoolValues(), pushEntity.getPoolValues());
-            Double newTotals = existedEntity.getTotals() + sumAllElement(pushEntity.getPoolValues());
+            Long[] newPools = ArrayUtils.addAll(existedEntity.getPoolValues(), pushEntity.getPoolValues());
             SavingPushEntity savingPushEntity = new SavingPushEntity();
             savingPushEntity.setPoolId(existedEntity.getPoolId());
             savingPushEntity.setPoolValues(newPools);
-            savingPushEntity.setTotals(newTotals);
             map.put(savingPushEntity.getPoolId(), savingPushEntity);
             return CommonConstants.APPENDED;
         }
@@ -78,23 +76,38 @@ public class ApiService {
         SavingPushEntity  savingPushEntity  = map.get(queryEntity.getPoolId());
         if (null != savingPushEntity) {
             //Calculate with provided quantile by api
-            double calculatedQuantile = (queryEntity.getPercentile() * savingPushEntity.getTotals()) / 100;
-            long elementCount = savingPushEntity.getPoolValues().length;
+            Long[] sortedPool = savingPushEntity.getPoolValues();
+            Arrays.sort(sortedPool);
+            long calculatedQuantile = percentile(sortedPool, queryEntity.getPercentile());
+            long elementCount = sortedPool.length;
             return new QueryReturnEntity(calculatedQuantile, elementCount);
         }
         return null;
     }
 
     /**
-     * This method calculates sum of all elements in one array
-     * @param elements
+     * This method return info of specific pool with provided poolId
+     * @param poolId
      * @return
      */
-    private Double sumAllElement(Double[] elements) {
-        double retVal = 0;
-        for (double element : elements) {
-            retVal = retVal + element;
+    public SavingPushEntity check(long poolId) {
+        SavingPushEntity savingPushEntity = map.get(poolId);
+        if (null != savingPushEntity) {
+            Long[] sortedPool = savingPushEntity.getPoolValues();
+            Arrays.sort(sortedPool);
+            return new SavingPushEntity(savingPushEntity.getPoolId(), sortedPool);
         }
-        return retVal;
+        return null;
+    }
+
+    /**
+     * This method calculate the quantile with percentile
+     * @param pool
+     * @param percentile
+     * @return
+     */
+    public static long percentile(Long[] pool, double percentile) {
+        int index = (int) Math.ceil(percentile / 100.0 * pool.length);
+        return pool[index - 1];
     }
 }

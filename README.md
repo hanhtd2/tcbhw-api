@@ -7,7 +7,7 @@
 ## 1. Describe about logic flow and answer requirements:
 ### a. Flow:
 
-Users can navigate to 2 endpoints:
+Users can navigate to 3 endpoints:
 * The first one receives data from user with below format:
 ```json
   {
@@ -26,24 +26,51 @@ Sample:
   "status": "appended"
 }
 ```
+request (POST): http://localhost:8080/push
+
+---
 
 * The second one receives data from user with below format:
 ```json
 {
    "poolId": 123546,
-   "percentile": 99.5
+   "percentile": 50
 }
 ```
-The request will return 2 values, one is the sum() of all elements which have poolId as provided in this request and combine with the rate "percentile", and other is number of elements in pool.
+The request will return 2 values, one is the calculated quantile of pool which have poolId as provided in this request and combine with the rate "percentile", and other is number of elements in pool.
+
+ref: https://www.indeed.com/career-advice/career-development/how-to-calculate-percentile-rank
 
 If poolId does not exist, it will return error.
 Sample:
 ```json
 {
-  "calculatedQuantileTotal": 24.68,
+  "calculatedQuantile": 2,
   "elementCount": 4
 }
 ```
+request (POST): http://localhost:8080/query
+
+---
+
+The last one (additional) is developed as GET method for checking pool elements (sorted) with provided poolId:
+
+request: http://localhost:8080/check?id=123456
+output:
+```json
+{
+    "poolId": 123456,
+    "poolValues": [
+        1,
+        2,
+        6,
+        7
+    ]
+}
+```
+
+---
+
 ### b. Answer question as required in email:
 ##### % *the response from the append is a status field confirming "appended" or "inserted".*
 > Discuss as above

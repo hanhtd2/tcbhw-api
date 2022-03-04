@@ -1,6 +1,7 @@
 package com.hanhtd26.tcbhwapi.restservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,6 +15,7 @@ public class QueryEntity {
     private Long poolId;
 
     @NotNull(message = "percentile is mandatory")
+    @Range(min = 1, max = 99, message = "percentile must be in range 1-99")
     @JsonProperty("percentile")
     private Double percentile;
 

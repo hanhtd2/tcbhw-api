@@ -5,20 +5,20 @@ package com.hanhtd26.tcbhwapi.restservice.entity;
  * Furthermore, it includes some pre-check condition of each property
  */
 public class QueryReturnEntity {
-    private double calculatedQuantileTotal;
+    private long calculatedQuantile;
     private long elementCount;
 
-    public QueryReturnEntity(double calculatedQuantileTotal, long elementCount) {
-        this.calculatedQuantileTotal  = calculatedQuantileTotal;
+    public QueryReturnEntity(long calculatedQuantileTotal, long elementCount) {
+        this.calculatedQuantile = calculatedQuantileTotal;
         this.elementCount = elementCount;
     }
 
-    public double getCalculatedQuantileTotal() {
-        return calculatedQuantileTotal;
+    public long getCalculatedQuantile() {
+        return calculatedQuantile;
     }
 
-    public void setCalculatedQuantileTotal(double calculatedQuantileTotal) {
-        this.calculatedQuantileTotal = calculatedQuantileTotal;
+    public void setCalculatedQuantile(long calculatedQuantile) {
+        this.calculatedQuantile = calculatedQuantile;
     }
 
     public long getElementCount() {
